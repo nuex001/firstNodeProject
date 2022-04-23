@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%=title%></title>
+    <link rel="stylesheet" type="text/css" href="/blog.css" />
+    <link rel="stylesheet" type="text/css" href="/fa/css/font-awesome.css" />
+  </head>
+  <body>
+    <div class="container">
+      <%- include('./partials/nav.ejs') %>
+
+      <div href="#" class="child">
+        <% if(blog.title.length > 0){ %>
+        <div class="box">
+          <h1><%= blog.title%></h1>
+          <p><%= blog.content%></p>
+          <div class="file">
+            <img src="/<%= blog.files%>" alt="" />
+          </div>
+          <% } %>
+          <div class="comments">
+            <h2 id="head_comment">Comments <i class="fa fa-comments"></i></h2>
+            <% if(Comments.length > 0) { %> <% Comments.forEach(data => { %>
+            <li><%= data.comment %></li>
+            <% }) %> <% }else{ %> <% } %>
+          </div>
+        </div>
+      </div>
+      <form action="/comments" class="comment_box" method="POST">
+        <textarea name="msg" id="msg" cols="30" rows="10"></textarea>
+        <input
+          type="text"
+          name="postId"
+          id="postId"
+          value="<%= blog._id%>"
+          style="display: none"
+        />
+        <input type="submit" id="comment_submit" style="display: none" />
+        <label for="comment_submit"><i class="fa fa-paper-plane"></i></label>
+      </form>
+    </div>
+  </body>
+  <script>
+    const form = document.querySelector(".comment_box");
+    const headerComt = document.querySelector("#head_comment");
+    //
+    const comt = async function (msg) {
+      const fetchOptions = {
+        method: "POST",
+        // headers: {
+        // 	"Content-Type": "application/json",
+        // 	'Content-Type': 'application/x-www-form-urlencoded'
+        // },
+        body: msg,
+      };
+      const response = await fetch("/blog/comments", fetchOptions);
+      return response.json();
+    };
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (form.msg.value.trim() !== "") {
+        comt(new FormData(form))
+          .then((data) => {
+            return data;
+          })
+          .then((data) => {
+            // console.log(data);
+            const lis = document.querySelectorAll("li");
+            const li_length = lis.length - 1;
+            if (lis.length <= 0) {
+                headerComt.insertAdjacentHTML(
+              "afterend",
+              `<li>${data.msg}</li>`
+            );
+            }
+            lis[li_length].insertAdjacentHTML(
+              "afterend",
+              `<li>${data.msg}</li>`
+            );
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    });
+  </script>
+</html>

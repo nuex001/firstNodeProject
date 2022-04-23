@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%=title%></title>
+    <link rel="stylesheet" href="/create-blog.css">
+    <link rel="stylesheet" href="/fa/css/font-awesome.css">
+</head>
+<body>
+    <div class="container">
+        <%- include('./partials/nav.ejs') %>
+       <div class="child" >
+         <form action="/upload" method="POST" id="createForm" enctype='multipart/form-data'>
+             <h1>Create Blog</h1>
+             <input type="title" name="title" placeholder="input title">
+             <input type="file" name="file" id="">
+             <textarea name="Post" id=""></textarea>
+             <input type="submit" value="submit">
+         </form>
+       </div>
+      
+    </div>
+</body>
+
+</html>
+<!-- https://www.youtube.com/watch?v=ZKqUoL3h74Q -->

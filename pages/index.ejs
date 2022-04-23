@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%=title%></title>
+    <link rel="stylesheet" href="/index.css" />
+    <link rel="stylesheet" href="/fa/css/font-awesome.css" />
+  </head>
+  <body>
+    <div class="container">
+      <%- include('./partials/nav.ejs') %>
+      <div class="child">
+        <% if(blogs.length > 0){ %> <% blogs.forEach(blog=>{ %>
+        <a href="/blog/<%=blog._id%>" class="box">
+          <i class="fa fa-trash" data-index="<%=blog._id%>" id="delete"></i>
+          <h1><%=blog.title%></h1>
+          <p><%=blog.content%></p>
+          <div class="file">
+            <img src="/<%=blog.files%>" alt="" />
+          </div>
+        </a>
+        <% }) %> <% }else{ %>
+        <h1 style="color: crimson">No Blogs recently</h1>
+        <% } %>
+      </div>
+    </div>
+  </body>
+  <script>
+    const child = document.querySelector(".child");
+    child.addEventListener("click", (e) => {
+      if (e.target.tagName === "I") {
+        e.preventDefault();
+        //  console.log(e.target.getAttribute('data-index'));
+        const dataIndex = e.target.getAttribute("data-index");
+        const endpiont = `/blog/${dataIndex}`;
+
+        fetch(endpiont, {
+          method: "DELETE",
+        })
+        .then(response=>{
+        return response.json();
+        })
+        .then(result=>{
+          // console.log(e.target.parentElement);
+          e.target.parentElement.remove();
+        })
+        .catch(err=>{
+
+        })
+      }
+    });
+  </script>
+</html>
